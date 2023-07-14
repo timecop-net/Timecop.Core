@@ -1,0 +1,46 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33801.468
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Timecop.Core", "src\Timecop.Core\Timecop.Core.csproj", "{2C81D165-C2C1-40DF-9D9E-0E21FE5DA730}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Timecop.Core.Tests", "test\Timecop.Core.Tests\Timecop.Core.Tests.csproj", "{F7EDE0C3-FB11-44D2-8A1C-5600EFFE9350}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C1BA49EC-D151-491B-B78F-7B1A2A06212E}"
+	ProjectSection(SolutionItems) = preProject
+		Dockerfile = Dockerfile
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{92009F6C-93D2-4099-9671-34CC6D362E6C}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\build.yml = .github\workflows\build.yml
+		.github\workflows\publish.yml = .github\workflows\publish.yml
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2C81D165-C2C1-40DF-9D9E-0E21FE5DA730}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C81D165-C2C1-40DF-9D9E-0E21FE5DA730}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2C81D165-C2C1-40DF-9D9E-0E21FE5DA730}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2C81D165-C2C1-40DF-9D9E-0E21FE5DA730}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F7EDE0C3-FB11-44D2-8A1C-5600EFFE9350}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F7EDE0C3-FB11-44D2-8A1C-5600EFFE9350}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F7EDE0C3-FB11-44D2-8A1C-5600EFFE9350}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F7EDE0C3-FB11-44D2-8A1C-5600EFFE9350}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{92009F6C-93D2-4099-9671-34CC6D362E6C} = {C1BA49EC-D151-491B-B78F-7B1A2A06212E}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {253AFEBF-AC05-42DD-A938-CE1B03291A8D}
+	EndGlobalSection
+EndGlobal
