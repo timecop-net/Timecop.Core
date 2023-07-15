@@ -1,10 +1,12 @@
 using FluentAssertions;
+using TCop.Core.Context;
+using TCop.Core.Time;
 
 namespace TCop.Core.Tests;
 
 public class TimecopContextTests
 {
-    private static readonly PointInTime Base = new (new DateTime(3000, 1, 1));
+    private static readonly PointInTime Base = PointInTime.FromBclTicks(new DateTime(3000, 1, 1).Ticks);
     private static PointInTime BasePlus(int minutes) => Base.Plus(TimeSpan.FromMinutes(minutes));
     private static TimeSpan Minutes(int minutes) => TimeSpan.FromMinutes(minutes);
 

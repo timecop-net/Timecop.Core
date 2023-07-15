@@ -1,6 +1,7 @@
 ﻿using System;
+using TCop.Core.Time;
 
-namespace TCop.Core;
+namespace TCop.Core.Context;
 
 public struct TimecopContext
 {

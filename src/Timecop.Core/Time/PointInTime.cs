@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace TCop.Core;
+namespace TCop.Core.Time;
 
 public readonly struct PointInTime
 {
@@ -8,18 +8,18 @@ public readonly struct PointInTime
 
     public long UnixEpochTicks { get; }
 
-    public DateTime DateTime => new(UnixEpochTicks - BclEpochRelativeToUnixEpochTicks, DateTimeKind.Utc);
+    public DateTime DateTimeUtc => new(UnixEpochTicks - BclEpochRelativeToUnixEpochTicks, DateTimeKind.Utc);
 
-    public static PointInTime Now => new(DateTime.UtcNow);
+    public static PointInTime Now => FromBclTicks(DateTime.UtcNow.Ticks);
 
     public PointInTime(long unixEpochTicks)
     {
         UnixEpochTicks = unixEpochTicks;
     }
 
-    public PointInTime(DateTime dateTime)
+    public static PointInTime FromBclTicks(long bclTicks)
     {
-        UnixEpochTicks = dateTime.Ticks + BclEpochRelativeToUnixEpochTicks;
+        return new(bclTicks + BclEpochRelativeToUnixEpochTicks);
     }
 
     public PointInTime Plus(TimeSpan span)
