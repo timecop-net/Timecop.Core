@@ -30,7 +30,7 @@ public class PointInTimeBuilder
         return this;
     }
 
-    internal PointInTime Build()
+    public PointInTime Build()
     {
         if (LocalOrUtcShouldHaveBeenSpecifiedExplicitly())
         {
