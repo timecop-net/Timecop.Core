@@ -14,7 +14,8 @@ public class PointInTimeBuilderTests
     {
         _builder.LocalTime();
 
-        _builder.Build().DateTimeUtc.ToLocalTime().Should().BeCloseTo(DateTime.Now, DateTimeComparisonPrecision);
+        _builder.Build(out var kind).DateTimeUtc.ToLocalTime().Should().BeCloseTo(DateTime.Now, DateTimeComparisonPrecision);
+        kind.Should().Be(DateTimeKind.Local);
     }
 
     [Fact]
@@ -22,7 +23,8 @@ public class PointInTimeBuilderTests
     {
         _builder.UtcTime();
 
-        _builder.Build().DateTimeUtc.Should().BeCloseTo(DateTime.UtcNow, DateTimeComparisonPrecision);
+        _builder.Build(out var kind).DateTimeUtc.Should().BeCloseTo(DateTime.UtcNow, DateTimeComparisonPrecision);
+        kind.Should().Be(DateTimeKind.Utc);
     }
 
     [Fact]
@@ -30,7 +32,7 @@ public class PointInTimeBuilderTests
     {
         _builder.On(1990, 12, 2);
 
-        var build = () => _builder.Build();
+        var build = () => _builder.Build(out _);
 
         build.Should().Throw<PointInTimeBuilderNeitherLocalNorUtcException>().WithMessage("Call either LocalTime() or UtcTime() when configuring the point in time.");
     }
@@ -40,7 +42,7 @@ public class PointInTimeBuilderTests
     {
         _builder.At(14, 0, 0);
 
-        var build = () => _builder.Build();
+        var build = () => _builder.Build(out _);
 
         build.Should().Throw<PointInTimeBuilderNeitherLocalNorUtcException>().WithMessage("Call either LocalTime() or UtcTime() when configuring the point in time.");
     }
@@ -50,7 +52,17 @@ public class PointInTimeBuilderTests
     {
         _builder.InTheFuture();
 
-        _builder.Build().DateTimeUtc.Should().BeAfter(DateTime.UtcNow);
+        _builder.Build(out var kind).DateTimeUtc.Should().BeAfter(DateTime.UtcNow);
+        kind.Should().Be(DateTimeKind.Utc);
+    }
+
+    [Fact]
+    public void InTheFuture_WithLocalTime_ShouldReturnPointOfTimeInTheFutureInLocalTime()
+    {
+        _builder.InTheFuture().LocalTime();
+
+        _builder.Build(out var kind).DateTimeUtc.Should().BeAfter(DateTime.UtcNow);
+        kind.Should().Be(DateTimeKind.Local);
     }
 
     [Fact]
@@ -58,7 +70,8 @@ public class PointInTimeBuilderTests
     {
         _builder.InThePast();
 
-        _builder.Build().DateTimeUtc.Should().BeBefore(DateTime.UtcNow);
+        _builder.Build(out var kind).DateTimeUtc.Should().BeBefore(DateTime.UtcNow);
+        kind.Should().Be(DateTimeKind.Utc);
     }
 
     [Fact]
@@ -70,8 +83,9 @@ public class PointInTimeBuilderTests
 
         var now = DateTime.Now;
 
-        _builder.Build().DateTimeUtc.ToLocalTime().Should().BeCloseTo(new DateTime(1990, 12, 2,
+        _builder.Build(out var kind).DateTimeUtc.ToLocalTime().Should().BeCloseTo(new DateTime(1990, 12, 2,
             now.Hour, now.Minute, now.Second, now.Millisecond, DateTimeKind.Local), DateTimeComparisonPrecision);
+        kind.Should().Be(DateTimeKind.Local);
     }
 
     [Fact]
@@ -83,7 +97,8 @@ public class PointInTimeBuilderTests
 
         var now = DateTime.Now;
 
-        _builder.Build().DateTimeUtc.ToLocalTime().Should().BeCloseTo(new DateTime(now.Year, now.Month, now.Day,
+        _builder.Build(out var kind).DateTimeUtc.ToLocalTime().Should().BeCloseTo(new DateTime(now.Year, now.Month, now.Day,
             14, 15, 30, 893, DateTimeKind.Local), DateTimeComparisonPrecision);
+        kind.Should().Be(DateTimeKind.Local);
     }
 }
