@@ -15,7 +15,7 @@ public class TimecopContextTests
     {
         var context = new TimecopContext();
 
-        context.GetUtcNow(Base).Should().Be(Base);
+        context.GetNow(Base).Should().Be(Base);
     }
 
     [Fact]
@@ -25,7 +25,7 @@ public class TimecopContextTests
 
         context.TravelBy(Minutes(5));
 
-        context.GetUtcNow(BasePlus(5)).Should().Be(BasePlus(10));
+        context.GetNow(BasePlus(5)).Should().Be(BasePlus(10));
     }
 
     [Fact]
@@ -35,7 +35,7 @@ public class TimecopContextTests
 
         context.Freeze(Base);
 
-        context.GetUtcNow(BasePlus(5)).Should().Be(Base);
+        context.GetNow(BasePlus(5)).Should().Be(Base);
     }
 
     [Fact]
@@ -46,7 +46,7 @@ public class TimecopContextTests
         context.Freeze(Base);
         context.TravelBy(Minutes(10));
 
-        context.GetUtcNow(BasePlus(5)).Should().Be(BasePlus(10));
+        context.GetNow(BasePlus(5)).Should().Be(BasePlus(10));
     }
 
 
@@ -59,9 +59,9 @@ public class TimecopContextTests
 
         context.TravelBy(Minutes(10));
 
-        context.Unfreeze(BasePlus(20));
+        context.Resume(BasePlus(20));
 
-        context.GetUtcNow(BasePlus(25)).Should().Be(BasePlus(15));
+        context.GetNow(BasePlus(25)).Should().Be(BasePlus(15));
     }
 
     [Fact]
@@ -71,10 +71,10 @@ public class TimecopContextTests
 
         context.Freeze(Base);
 
-        context.Unfreeze(BasePlus(20));
+        context.Resume(BasePlus(20));
 
         context.TravelBy(Minutes(-15));
 
-        context.GetUtcNow(BasePlus(35)).Should().Be(Base);
+        context.GetNow(BasePlus(35)).Should().Be(Base);
     }
 }

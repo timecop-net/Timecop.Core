@@ -23,28 +23,28 @@ public struct TimecopContext
         _timeTravelDelta = _timeTravelDelta.Add(duration);
     }
 
-    public PointInTime GetUtcNow(PointInTime realUtcNow)
+    public PointInTime GetNow(PointInTime realNow)
     {
-        var baseTime = _lastRealTimeFrozenAt ?? realUtcNow;
+        var baseTime = _lastRealTimeFrozenAt ?? realNow;
 
         var baseTimeWithDelta = baseTime.Plus(_timeTravelDelta);
 
         return baseTimeWithDelta.Minus(_totalRealTimePassedWhileFrozen);
     }
 
-    public PointInTime Freeze(PointInTime utcNow)
+    public PointInTime Freeze(PointInTime now)
     {
-        _lastRealTimeFrozenAt = utcNow;
+        _lastRealTimeFrozenAt = now;
 
-        return GetUtcNow(utcNow);
+        return GetNow(now);
     }
 
-    public void Unfreeze(PointInTime utcNow)
+    public void Resume(PointInTime now)
     {
         if (!_lastRealTimeFrozenAt.HasValue)
             return;
 
-        var realTimePassedInFrozenState = utcNow.Minus(_lastRealTimeFrozenAt.Value);
+        var realTimePassedInFrozenState = now.Minus(_lastRealTimeFrozenAt.Value);
 
         _totalRealTimePassedWhileFrozen = _totalRealTimePassedWhileFrozen.Add(realTimePassedInFrozenState);
 
