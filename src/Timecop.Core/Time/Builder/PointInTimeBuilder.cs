@@ -30,11 +30,16 @@ public class PointInTimeBuilder
         return this;
     }
 
-    public PointInTime Build()
+    public PointInTime Build(out DateTimeKind kind)
     {
         if (LocalOrUtcShouldHaveBeenSpecifiedExplicitly())
         {
             throw new PointInTimeBuilderNeitherLocalNorUtcException();
+        }
+
+        if (_context.Kind == DateTimeKind.Unspecified)
+        {
+            _context.Kind = DateTimeKind.Utc;
         }
 
         var baseDateTime = GetBaseDateTime();
@@ -44,6 +49,8 @@ public class PointInTimeBuilder
 
         var dateTime = new DateTime(_context.Date.Year, _context.Date.Month, _context.Date.Day,
             _context.Time.Hour, _context.Time.Minute, _context.Time.Second, _context.Time.Millisecond, _context.Kind);
+
+        kind = _context.Kind;
 
         return PointInTime.FromBclTicks(dateTime.ToUniversalTime().Ticks);
     }
@@ -77,13 +84,15 @@ public class PointInTimeBuilder
         return (_context.Date != null || _context.Time != null) && _context.Kind == DateTimeKind.Unspecified;
     }
 
-    public void InTheFuture()
+    public PointInTimeBuilder InTheFuture()
     {
         _context.BaseTimePoint = BaseTimePoint.Future;
+        return this;
     }
 
-    public void InThePast()
+    public PointInTimeBuilder InThePast()
     {
         _context.BaseTimePoint = BaseTimePoint.Past;
+        return this;
     }
 }
