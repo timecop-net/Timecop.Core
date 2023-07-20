@@ -7,7 +7,7 @@
 		<Copyright>Copyright Dmytro Khmara</Copyright>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<PackageTags>DateTime;Date;Time;Unit;Testing;</PackageTags>
-		<!--PackageIcon>icon.png</PackageIcon>-->
+		<PackageIcon>icon.png</PackageIcon>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<RepositoryType>git</RepositoryType>
 		<RepositoryUrl>https://github.com/timecop-net/Timecop.Core</RepositoryUrl>
@@ -27,7 +27,7 @@
 
 	<ItemGroup>
 		<None Include="..\..\README.md" Pack="true" PackagePath="" />
-		<!--<None Include="..\..\icon.png" Pack="true" PackagePath="" />-->
+		<None Include="..\..\icon.png" Pack="true" PackagePath="" />
 
 		<PackageReference Include="MinVer" Version="4.3.0">
 			<PrivateAssets>all</PrivateAssets>
