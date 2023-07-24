@@ -1,6 +1,5 @@
 using FluentAssertions;
 using TCop.Core.Context;
-using TCop.Core.Time;
 
 namespace TCop.Core.Tests;
 

@@ -1,7 +1,6 @@
 ﻿using FluentAssertions;
-using TCop.Core.Time;
 
-namespace TCop.Core.Tests.Time;
+namespace TCop.Core.Tests;
 
 public class PointInTimeTests
 {

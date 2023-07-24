@@ -2,7 +2,7 @@
 
 	<PropertyGroup>
 		<PackageId>Timecop.Core</PackageId>
-		<Description>Components that power Timecop.</Description>
+		<Description>Components that power Timecop and Timecop.NodaTime.</Description>
 		<Authors>Dmytro Khmara</Authors>
 		<Copyright>Copyright Dmytro Khmara</Copyright>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
