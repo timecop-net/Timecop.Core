@@ -1,10 +1,10 @@
 ﻿using System;
 
-namespace TCop.Core.Time;
+namespace TCop.Core;
 
 public readonly struct PointInTime
 {
-    private static readonly long BclEpochRelativeToUnixEpochTicks = -(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).Ticks);
+    private static readonly long BclEpochRelativeToUnixEpochTicks = -new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).Ticks;
 
     public long UnixEpochTicks { get; }
 
