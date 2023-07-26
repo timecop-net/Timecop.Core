@@ -27,13 +27,13 @@ public class TimecopContextStoreTests
 
         var baseFrozen = store1.Mutate((ref TimecopContext o, PointInTime now) => o.Freeze(now));
         
-        store1.Mutate((ref TimecopContext o) => o.TravelBy(TimeSpan.FromMinutes(10)));
+        store1.Mutate((ref TimecopContext o, PointInTime realNow) => o.TravelBy(TimeSpan.FromMinutes(10), realNow));
 
         await Task.Run(async () =>
         {
             var store2 = new TimecopContextStore();
 
-            store2.Mutate((ref TimecopContext o) => o.TravelBy(TimeSpan.FromMinutes(20)));
+            store2.Mutate((ref TimecopContext o, PointInTime realNow) => o.TravelBy(TimeSpan.FromMinutes(20), realNow));
             store2.Mutate((ref TimecopContext o, PointInTime now) => o.Resume(now));
 
             await Task.Delay(500);
@@ -63,7 +63,7 @@ public class TimecopContextStoreTests
         {
             var store = new TimecopContextStore();
 
-            store.Mutate((ref TimecopContext o) => o.TravelBy(TimeSpan.FromMinutes(10)));
+            store.Mutate((ref TimecopContext o, PointInTime realNow) => o.TravelBy(TimeSpan.FromMinutes(10), realNow));
 
             TimecopContextStore.AsyncContextUtcNow.DateTimeUtc.Should().BeCloseTo(DateTime.UtcNow.AddMinutes(10), DateTimeComparisonPrecision);
 
@@ -80,7 +80,7 @@ public class TimecopContextStoreTests
 
             TimecopContextStore.AsyncContextUtcNow.DateTimeUtc.Should().BeCloseTo(DateTime.UtcNow, DateTimeComparisonPrecision);
 
-            store.Mutate((ref TimecopContext o) => o.TravelBy(TimeSpan.FromMinutes(10)));
+            store.Mutate((ref TimecopContext o, PointInTime realNow) => o.TravelBy(TimeSpan.FromMinutes(10), realNow));
         });
 
         Task.WaitAll(task1, task2);
