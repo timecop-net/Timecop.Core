@@ -22,9 +22,61 @@ public class TimecopContextTests
     {
         var context = new TimecopContext();
 
-        context.TravelBy(Minutes(5));
+        context.TravelBy(Minutes(5), Base);
 
         context.GetNow(BasePlus(5)).Should().Be(BasePlus(10));
+    }
+
+    [Fact]
+    public void GetUtcNow_Travel10MinutesTwice_ShouldBe20MinutesAhead()
+    {
+        var context = new TimecopContext();
+
+        context.TravelBy(Minutes(10), Base);
+        context.TravelBy(Minutes(10), Base);
+
+        context.GetNow(Base).Should().Be(BasePlus(20));
+    }
+
+    [Fact]
+    public void GetUtcNow_TravelTo_AfterTravelBy_ShouldReturnTravelToTime()
+    {
+        var context = new TimecopContext();
+
+        var travelTo = BasePlus(30);
+
+        context.TravelBy(Minutes(10), Base);
+
+        context.TravelTo(travelTo, Base);
+        
+        context.GetNow(Base).Should().Be(travelTo);
+    }
+
+    [Fact]
+    public void GetUtcNow_Resume_AfterFreezeAt_ShouldReturnFreezedAtTimePlusElapsedTime()
+    {
+        var context = new TimecopContext();
+
+        var freezeAt = BasePlus(30);
+
+        context.FreezeAt(freezeAt, Base);
+        context.Resume(Base);
+
+        context.GetNow(BasePlus(5)).Should().Be(freezeAt.Plus(TimeSpan.FromMinutes(5)));
+    }
+
+    [Fact]
+    public void GetUtcNow_Freeze_AfterTravelTo_ShouldReturnTimeItWasFrozenAt()
+    {
+        var context = new TimecopContext();
+
+        var travelTo = BasePlus(30);
+
+        context.TravelTo(travelTo, Base);
+
+        context.Freeze(Base);
+
+        context.GetNow(Base).Should().Be(travelTo);
     }
 
     [Fact]
@@ -43,7 +95,7 @@ public class TimecopContextTests
         var context = new TimecopContext();
 
         context.Freeze(Base);
-        context.TravelBy(Minutes(10));
+        context.TravelBy(Minutes(10), Base);
 
         context.GetNow(BasePlus(5)).Should().Be(BasePlus(10));
     }
@@ -54,13 +106,13 @@ public class TimecopContextTests
     {
         var context = new TimecopContext();
 
-        context.Freeze(Base);
+        context.Freeze(Base); // real: 0, timecop: 0
 
-        context.TravelBy(Minutes(10));
+        context.TravelBy(Minutes(10), Base); // real: 0, timecop: +10
 
-        context.Resume(BasePlus(20));
+        context.Resume(BasePlus(20)); // real: 20, timecop: +10
 
-        context.GetNow(BasePlus(25)).Should().Be(BasePlus(15));
+        context.GetNow(BasePlus(25)).Should().Be(BasePlus(15)); // real: 25, timecop: +15
     }
 
     [Fact]
@@ -72,8 +124,21 @@ public class TimecopContextTests
 
         context.Resume(BasePlus(20));
 
-        context.TravelBy(Minutes(-15));
+        context.TravelBy(Minutes(-15), BasePlus(20));
 
         context.GetNow(BasePlus(35)).Should().Be(Base);
+    }
+
+    [Fact]
+    public void GetUtcNow_Reset_AfterTravel_ShouldReturnCurrentTime()
+    {
+        var context = new TimecopContext();
+
+        context.Freeze(Base);
+        context.TravelBy(TimeSpan.FromMinutes(10), Base);
+
+        context.Reset();
+
+        context.GetNow(BasePlus(25)).Should().Be(BasePlus(25));
     }
 }

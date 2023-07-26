@@ -4,49 +4,79 @@ namespace TCop.Core.Context;
 
 public struct TimecopContext
 {
-    private PointInTime? _lastRealTimeFrozenAt;
-
-    private TimeSpan _timeTravelDelta;
-
-    private TimeSpan _totalRealTimePassedWhileFrozen;
+    private PointInTime? _subjectiveNow;
+    private PointInTime? _lastKnownRealNow;
+    private bool _isFrozen;
 
     public TimecopContext()
     {
-        _timeTravelDelta = TimeSpan.Zero;
-        _totalRealTimePassedWhileFrozen = TimeSpan.Zero;
-        _lastRealTimeFrozenAt = null;
+        _subjectiveNow = null;
+        _lastKnownRealNow = null;
+        _isFrozen = false;
     }
 
-    public void TravelBy(TimeSpan duration)
+    public void TravelBy(TimeSpan duration, PointInTime realNow)
     {
-        _timeTravelDelta = _timeTravelDelta.Add(duration);
+        var now = _subjectiveNow ?? realNow;
+
+        _subjectiveNow = now.Plus(duration);
+        _lastKnownRealNow = realNow;
+    }
+
+    public void TravelTo(PointInTime destination, PointInTime realNow)
+    {
+        _subjectiveNow = destination;
+        _lastKnownRealNow = realNow;
     }
 
     public PointInTime GetNow(PointInTime realNow)
     {
-        var baseTime = _lastRealTimeFrozenAt ?? realNow;
+        if (_lastKnownRealNow == null || _subjectiveNow == null)
+        {
+            return realNow;
+        }
 
-        var baseTimeWithDelta = baseTime.Plus(_timeTravelDelta);
+        if (_isFrozen)
+        {
+            return _subjectiveNow.Value;
+        }
 
-        return baseTimeWithDelta.Minus(_totalRealTimePassedWhileFrozen);
+        var lastKnownDelta = _subjectiveNow.Value.Minus(_lastKnownRealNow.Value);
+
+        return realNow.Plus(lastKnownDelta);
+
     }
 
-    public PointInTime Freeze(PointInTime now)
+    public PointInTime FreezeAt(PointInTime freezeAt, PointInTime realNow)
     {
-        _lastRealTimeFrozenAt = now;
+        _subjectiveNow = freezeAt;
+        _lastKnownRealNow = realNow;
+        _isFrozen = true;
 
-        return GetNow(now);
+        return GetNow(realNow);
     }
 
-    public void Resume(PointInTime now)
+    public PointInTime Freeze(PointInTime realNow)
     {
-        if (!_lastRealTimeFrozenAt.HasValue)
-            return;
+        _subjectiveNow ??= realNow;
+        _lastKnownRealNow = realNow;
+        _isFrozen = true;
 
-        var realTimePassedInFrozenState = now.Minus(_lastRealTimeFrozenAt.Value);
+        return GetNow(realNow);
+    }
 
-        _totalRealTimePassedWhileFrozen = _totalRealTimePassedWhileFrozen.Add(realTimePassedInFrozenState);
+    public void Resume(PointInTime realNow)
+    {
+        _lastKnownRealNow = realNow;
+        _isFrozen = false;
+    }
 
-        _lastRealTimeFrozenAt = null;
+    public void Reset()
+    {
+        _subjectiveNow = null;
+        _lastKnownRealNow = null;
+        _isFrozen = false;
     }
 }
+
+
